@@ -1,12 +1,12 @@
-module RespondsToParent
-  # Module containing the methods useful for child IFRAME to parent window communication
-  module ActionController
+module ActionController
+  class Base
     # Executes the response body as JavaScript in the context of the parent window.
     # Use this method of you are posting a form to a hidden IFRAME or if you would like
     # to use IFRAME base RPC.
-    def responds_to_parent(&block)
-      yield
-
+    def after_action_responds_to_parent
+      unless @responds_to_parent
+        return
+      end
       if performed?
         # Either pull out a redirect or the request body
         script =  if response.headers['Location']
@@ -40,6 +40,15 @@ module RespondsToParent
         render :text => script
       end
     end
+
+    def responds_to_parent(&block)
+      yield
+      @responds_to_parent = true
+    end
     alias respond_to_parent responds_to_parent
+
+    def self.responds_to_parentable
+      after_action :after_action_responds_to_parent
+    end
   end
 end
