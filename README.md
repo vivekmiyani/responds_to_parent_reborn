@@ -14,6 +14,7 @@ RJS to the parent window.
 
 ```ruby
   class Test < ActionController::Base
+    responds_to_parentable
     def main
     end
 
