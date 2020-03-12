@@ -37,7 +37,7 @@ module ActionController
           instance_variable_set(:@_response_body, nil)
         end
 
-        render :text => script
+        render plain: script
       end
     end
 
